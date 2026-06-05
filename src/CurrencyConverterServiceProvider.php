@@ -35,5 +35,11 @@ class CurrencyConverterServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/currency-converter.php' => config_path('currency-converter.php'),
         ], 'currency-converter-config');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations/create_exchange_rates_table.php.stub' => $this->app->databasePath(
+                'migrations/'.date('Y_m_d_His').'_create_exchange_rates_table.php'
+            ),
+        ], 'currency-converter-migrations');
     }
 }

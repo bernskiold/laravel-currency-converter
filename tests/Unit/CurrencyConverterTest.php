@@ -68,6 +68,32 @@ it('converts into the configured base currency', function () {
     expect(CurrencyConverter::toBase(100, 'USD'))->toBe(900.0);
 });
 
+it('converts from the configured base currency', function () {
+    config()->set('currency-converter.base_currency', 'SEK');
+
+    Http::fake([
+        'api.frankfurter.dev/*' => Http::response(['rates' => ['USD' => 0.1]]),
+    ]);
+
+    expect(CurrencyConverter::fromBase(1000, 'USD'))->toBe(100.0);
+});
+
+it('formats amounts using US defaults', function () {
+    expect(CurrencyConverter::format(1234.5))->toBe('1,234.50')
+        ->and(CurrencyConverter::format(1234.5, 'USD'))->toBe('1,234.50 USD')
+        ->and(CurrencyConverter::format(1234.5, 'USD', 0))->toBe('1,235 USD');
+});
+
+it('formats amounts using configured separators', function () {
+    config()->set('currency-converter.formatting', [
+        'decimals' => 2,
+        'decimal_separator' => ',',
+        'thousands_separator' => '.',
+    ]);
+
+    expect(CurrencyConverter::format(1234.5, 'EUR'))->toBe('1.234,50 EUR');
+});
+
 it('can use a specific driver for a single call', function () {
     config()->set('currency-converter.drivers.fixed.rates', ['USD' => ['SEK' => 12.0]]);
 

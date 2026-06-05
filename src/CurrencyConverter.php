@@ -38,6 +38,16 @@ class CurrencyConverter
     }
 
     /**
+     * Convert a value from the application's configured base currency into another currency.
+     *
+     * @throws Exceptions\CurrencyConversionException
+     */
+    public function fromBase(float $value, string $to, ?string $driver = null): float
+    {
+        return $this->convert($value, $this->baseCurrency(), $to, $driver);
+    }
+
+    /**
      * Get the (cached) exchange rate between two currencies.
      *
      * @throws Exceptions\CurrencyConversionException
@@ -69,6 +79,24 @@ class CurrencyConverter
     public function baseCurrency(): string
     {
         return strtoupper((string) $this->config->get('currency-converter.base_currency', 'SEK'));
+    }
+
+    /**
+     * Format an amount for display using the configured number formatting,
+     * optionally suffixed with a currency code (e.g. "1,234.56 USD").
+     */
+    public function format(float $value, ?string $currency = null, ?int $decimals = null): string
+    {
+        $formatting = $this->config->get('currency-converter.formatting', []);
+
+        $number = number_format(
+            $value,
+            $decimals ?? (int) ($formatting['decimals'] ?? 2),
+            $formatting['decimal_separator'] ?? '.',
+            $formatting['thousands_separator'] ?? ',',
+        );
+
+        return $currency ? "{$number} {$currency}" : $number;
     }
 
     /**

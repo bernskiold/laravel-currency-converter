@@ -40,6 +40,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Number Formatting
+    |--------------------------------------------------------------------------
+    |
+    | How amounts are formatted for display by the format() helper and the
+    | HandlesCurrencyConversion trait. Defaults to US conventions
+    | (e.g. "1,234.56"). For Swedish formatting use ',' and ' '.
+    |
+    */
+    'formatting' => [
+        'decimals' => 2,
+        'decimal_separator' => '.',
+        'thousands_separator' => ',',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Caching
     |--------------------------------------------------------------------------
     |
@@ -77,6 +93,55 @@ return [
             'base_url' => env('EXCHANGERATE_HOST_URL', 'https://api.exchangerate.host'),
             'access_key' => env('EXCHANGERATE_HOST_KEY'),
             'timeout' => 10,
+        ],
+
+        /*
+         | ExchangeRate-API (https://www.exchangerate-api.com) — broad currency
+         | coverage. With an API key the authenticated v6 endpoint is used; without
+         | one it falls back to the free, keyless open.er-api.com endpoint.
+         */
+        'exchangerate_api' => [
+            'base_url' => env('EXCHANGERATE_API_URL', 'https://v6.exchangerate-api.com'),
+            'open_base_url' => env('EXCHANGERATE_API_OPEN_URL', 'https://open.er-api.com'),
+            'api_key' => env('EXCHANGERATE_API_KEY'),
+            'timeout' => 10,
+        ],
+
+        /*
+         | Open Exchange Rates (https://openexchangerates.org) — requires an app ID.
+         | Note: the free plan only supports a USD base currency.
+         */
+        'open_exchange_rates' => [
+            'base_url' => env('OPEN_EXCHANGE_RATES_URL', 'https://openexchangerates.org'),
+            'app_id' => env('OPEN_EXCHANGE_RATES_APP_ID'),
+            'timeout' => 10,
+        ],
+
+        /*
+         | Fixer (https://fixer.io) — requires an access key.
+         | Note: the free plan only supports a EUR base currency.
+         */
+        'fixer' => [
+            'base_url' => env('FIXER_URL', 'https://data.fixer.io'),
+            'access_key' => env('FIXER_ACCESS_KEY'),
+            'timeout' => 10,
+        ],
+
+        /*
+         | Database — read rates from a table you manage yourself. Ideal when you
+         | need controlled, auditable rates rather than live market data. Publish
+         | the migration with:
+         |
+         |   php artisan vendor:publish --tag=currency-converter-migrations
+         */
+        'database' => [
+            'connection' => env('CURRENCY_CONVERTER_DB_CONNECTION'),
+            'table' => 'exchange_rates',
+            'columns' => [
+                'from' => 'from_currency',
+                'to' => 'to_currency',
+                'rate' => 'rate',
+            ],
         ],
 
         /*

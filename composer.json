@@ -1,0 +1,77 @@
+{
+    "name": "bernskiold/laravel-currency-converter",
+    "description": "A driver-based currency conversion package for Laravel with caching.",
+    "keywords": [
+        "bernskiold",
+        "laravel",
+        "currency",
+        "exchange rates",
+        "money",
+        "conversion"
+    ],
+    "homepage": "https://github.com/bernskiold/laravel-currency-converter",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bernskiold",
+            "email": "hello@bernskiold.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Erik Bernskiöld",
+            "email": "erik@bernskiold.com",
+            "homepage": "https://bernskiold.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.3",
+        "illuminate/contracts": "^11.0 || ^12.0 || ^13.0",
+        "illuminate/http": "^11.0 || ^12.0 || ^13.0",
+        "illuminate/support": "^11.0 || ^12.0 || ^13.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^8.0 || ^9.0",
+        "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+        "pestphp/pest": "^3.0 || ^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0 || ^4.0",
+        "phpstan/phpstan": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bernskiold\\LaravelCurrencyConverter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bernskiold\\LaravelCurrencyConverter\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bernskiold\\LaravelCurrencyConverter\\CurrencyConverterServiceProvider"
+            ],
+            "aliases": {
+                "CurrencyConverter": "Bernskiold\\LaravelCurrencyConverter\\Facades\\CurrencyConverter"
+            }
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint",
+        "phpstan": "vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=2G"
+    }
+}

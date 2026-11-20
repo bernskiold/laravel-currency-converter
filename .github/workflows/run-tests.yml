@@ -9,10 +9,7 @@ on:
 
 jobs:
     test:
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
         runs-on: ${{ matrix.os }}
-        # PHP 8.6 is pre-release; let it fail without failing the build.
-        continue-on-error: ${{ matrix.php == '8.6' }}
         strategy:
             fail-fast: false
             matrix:
